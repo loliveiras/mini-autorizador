@@ -2,6 +2,9 @@ package br.com.vr.miniautorizador.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Data;
+
+@Data
 @Document(collection = "miniautorizador")
 public class Cartao {
 	

@@ -1,15 +1,13 @@
-package br.com.vc.miniautorizador.controller;
+package br.com.vr.miniautorizador.controller;
 
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.PostMapping;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -19,24 +17,22 @@ import br.com.vr.miniautorizador.model.Cartao;
 @AutoConfigureMockMvc
 public class AutorizadorControllerTest {
 	
+	@Autowired
 	private MockMvc mockMvc;
 	
-	@BeforeEach
-	public void setUp() {
-	    mockMvc = MockMvcBuilders.standaloneSetup(meuController).build();
-	}
-
+	@Autowired
+	private ObjectMapper objectMapper;
+	
 	@Test
-	@PostMapping
-	public void criaCartao() {
+	public void criaCartao() throws Exception {
 		
 		String senha = "1234";
 		String numeroCartao = "6549873025634501";
 		Cartao cartao = new Cartao(senha, numeroCartao);
 		
-		ResultActions response = mockMvc.perform(
-                get("/api/show/1")
-                .contentType(MediaType.TEXT_HTML)
-                .header("meu header", "valor do meu header"));
+		mockMvc.perform(post("/cartoes")
+				.contentType("application/json")
+				.content(objectMapper.writeValueAsString(cartao)))
+		.andExpect(status().isOk());
 	}
 }
