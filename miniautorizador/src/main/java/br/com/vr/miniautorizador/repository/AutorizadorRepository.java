@@ -7,5 +7,6 @@ import br.com.vr.miniautorizador.model.Cartao;
 
 @Repository
 public interface AutorizadorRepository extends MongoRepository<Cartao, String> {
+	
 
 }

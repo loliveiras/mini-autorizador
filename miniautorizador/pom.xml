@@ -8,9 +8,9 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.vr</groupId>
-	<artifactId>miniautorizador</artifactId>
+	<artifactId>mini-autorizador-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>miniautorizador</name>
+	<name>mini-autorizador</name>
 	<description>Processamento de trasações de Vale Alimentação e Vale Refeição</description>
 	<properties>
 		<java.version>11</java.version>
