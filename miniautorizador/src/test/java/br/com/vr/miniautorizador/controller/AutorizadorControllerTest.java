@@ -11,7 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.vr.miniautorizador.model.Cartao;
+import br.com.vr.miniautorizador.model.CartaoModel;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -28,11 +28,24 @@ public class AutorizadorControllerTest {
 		
 		String senha = "1234";
 		String numeroCartao = "6549873025634501";
-		Cartao cartao = new Cartao(senha, numeroCartao);
+		CartaoModel cartao = new CartaoModel(senha, numeroCartao);
 		
 		mockMvc.perform(post("/cartoes")
 				.contentType("application/json")
 				.content(objectMapper.writeValueAsString(cartao)))
-		.andExpect(status().isOk());
+		.andExpect(status().isCreated());
+	}
+	
+	@Test
+	public void criaCartaoExistente() throws Exception {
+		
+		String senha = "1234";
+		String numeroCartao = "6549873025634501";
+		CartaoModel cartao = new CartaoModel(senha, numeroCartao);
+		
+		mockMvc.perform(post("/cartoes")
+				.contentType("application/json")
+				.content(objectMapper.writeValueAsString(cartao)))
+		.andExpect(status().isUnprocessableEntity());
 	}
 }

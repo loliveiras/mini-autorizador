@@ -6,13 +6,13 @@ import lombok.Data;
 
 @Data
 @Document(collection = "miniautorizador")
-public class Cartao {
+public class CartaoModel {
 	
 	private Double saldo;
 	private String senha;
 	private String numeroCartao;
 	
-	public Cartao(String senha, String numeroCartao) {
+	public CartaoModel(String senha, String numeroCartao) {
 		saldo = 500.0;
 		this.senha = senha;
 		this.numeroCartao = numeroCartao;
