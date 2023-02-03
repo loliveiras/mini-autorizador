@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.vr.miniautorizador.model.CartaoModel;
+import br.com.vr.miniautorizador.model.Cartao;
 
 @RestController
 @RequestMapping("/cartoes")
 public class AutorizadorController {
 	
 	@PostMapping
-	public ResponseEntity<CartaoModel> criaCartao(CartaoModel cartaoModel){
+	public ResponseEntity<Cartao> criaCartao(Cartao cartaoModel){
 		
 		try {
 			

@@ -2,16 +2,20 @@ package br.com.vr.miniautorizador.service;
 
 import org.springframework.stereotype.Service;
 
-import br.com.vr.miniautorizador.model.CartaoModel;
+import br.com.vr.miniautorizador.model.Cartao;
+import br.com.vr.miniautorizador.repository.AutorizadorRepository;
 
 @Service
 public class AutorizadorService {
 	
-	public CartaoModel save(CartaoModel cartaoModel) {
-		return cartaoModel;
+	private AutorizadorRepository autorizadorRepository;
+
+	public Cartao save(Cartao cartao) {
+		return autorizadorRepository.save(cartao);
 	}
 
-	public CartaoModel find(String numeroCartao) {
-		return null;
+	public Cartao find(String numeroCartao) throws Exception {
+		return autorizadorRepository.findById(numeroCartao)
+				.orElseThrow(() -> new Exception("O cartão: " + numeroCartao + " não existe."));
 	}
 }
