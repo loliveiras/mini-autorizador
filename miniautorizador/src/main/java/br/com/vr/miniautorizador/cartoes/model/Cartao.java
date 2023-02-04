@@ -1,4 +1,4 @@
-package br.com.vr.miniautorizador.model;
+package br.com.vr.miniautorizador.cartoes.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -31,7 +31,11 @@ public class Cartao {
 		return numeroCartao;
 	}
 	
-	public double getSaldo() {
+	public double saldo() {
 		return saldo;
+	}
+
+	public void atualizaSaldo(Cartao cartao, double valor) {
+		cartao.saldo -= valor;
 	}
 }

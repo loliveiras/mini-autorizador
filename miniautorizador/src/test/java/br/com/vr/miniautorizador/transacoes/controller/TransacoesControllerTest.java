@@ -1,6 +1,5 @@
-package br.com.vr.miniautorizador.controller;
+package br.com.vr.miniautorizador.transacoes.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -12,12 +11,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.vr.miniautorizador.model.Cartao;
-import br.com.vr.miniautorizador.service.Impl.CartoesServiceImpl;
+import br.com.vr.miniautorizador.cartoes.model.Cartao;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CartoesControllerTest {
+public class TransacoesControllerTest {
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -32,33 +30,9 @@ public class CartoesControllerTest {
 		String numeroCartao = "6549873025634506";
 		Cartao cartao = new Cartao(senha, numeroCartao);
 		
-		mockMvc.perform(post("/cartoes")
+		mockMvc.perform(post("/transacoes")
 				.contentType("application/json")
 				.content(objectMapper.writeValueAsString(cartao)))
 		.andExpect(status().isCreated());
-	}
-	
-	@Test
-	public void criaCartaoExistente() throws Exception {
-		
-		String senha = "1234";
-		String numeroCartao = "6549873025634503";
-		Cartao cartao = new Cartao(senha, numeroCartao);
-		
-		mockMvc.perform(post("/cartoes")
-				.contentType("application/json")
-				.content(objectMapper.writeValueAsString(cartao)))
-		.andExpect(status().isUnprocessableEntity());
-	}
-	
-	@Test
-	public void consultaSaldo(String numeroCartao) throws Exception {
-		
-		numeroCartao = "6549873025634501";
-		
-		mockMvc.perform(get("/cartoes/numeroCartao")
-				.contentType("application/json")
-				.param(numeroCartao, numeroCartao))
-		.andExpect(status().isOk());
 	}
 }

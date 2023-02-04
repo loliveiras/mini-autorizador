@@ -1,4 +1,4 @@
-package br.com.vr.miniautorizador.controller;
+package br.com.vr.miniautorizador.cartoes.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.vr.miniautorizador.model.Cartao;
-import br.com.vr.miniautorizador.service.CartoesService;
+import br.com.vr.miniautorizador.cartoes.model.Cartao;
+import br.com.vr.miniautorizador.cartoes.service.CartoesService;
 
 @RestController
 @RequestMapping("/cartoes")
@@ -24,11 +24,6 @@ public class CartoesController {
 	public ResponseEntity<Cartao> criaCartao(@RequestBody Cartao cartao) {
 
 		try {
-			boolean existe = cartoesService.exiteCartao(cartao.getNumeroCartao());
-
-			if (existe)
-				throw new IllegalArgumentException("Cartao ja existe!");
-
 			cartoesService.criar(cartao);
 			return ResponseEntity.status(HttpStatus.CREATED).body(cartao);
 
@@ -42,7 +37,7 @@ public class CartoesController {
 
 		try {
 			Cartao cartao = cartoesService.obterSaldo(numeroCartao);
-			return ResponseEntity.status(HttpStatus.OK).body(cartao.getSaldo());
+			return ResponseEntity.status(HttpStatus.OK).body(cartao.saldo());
 
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

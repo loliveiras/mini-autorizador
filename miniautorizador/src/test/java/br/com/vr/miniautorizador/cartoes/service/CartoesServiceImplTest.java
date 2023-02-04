@@ -1,4 +1,4 @@
-package br.com.vr.miniautorizador.service;
+package br.com.vr.miniautorizador.cartoes.service;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -8,38 +8,38 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.vr.miniautorizador.model.Cartao;
-import br.com.vr.miniautorizador.service.Impl.CartoesServiceImpl;
+import br.com.vr.miniautorizador.cartoes.model.Cartao;
+import br.com.vr.miniautorizador.cartoes.service.Impl.CartoesServiceImpl;
 
 @RunWith(SpringRunner.class)
-public class CartoesServiceTest {
+public class CartoesServiceImplTest {
 	
-	static Cartao cartaoModel;
+	static Cartao cartao;
 	
 	@BeforeAll
 	protected static void populaCartao() {
-		cartaoModel = new Cartao("1234", "6549873025634501");
+		cartao = new Cartao("1234", "6549873025634501");
 	}
 	
 	@TestConfiguration
-	static class AutorizadorServiceConfiguration {
+	static class CartoesServiceImplConfiguration {
 		
 		@Bean
-		public CartoesServiceImpl autorizadorService() {
+		public CartoesService cartoesService() {
 			return new CartoesServiceImpl();
 		}
 	}
 	
 	@Autowired
-	private CartoesServiceImpl autorizadorService;
+	private CartoesService cartoesService;
 	
 	@Test
 	public void saveTest() {
-		autorizadorService.criar(cartaoModel);
+		cartoesService.criar(cartao);
 	}
 	
 	@Test
 	public void findTest() throws Exception {
-		autorizadorService.obterSaldo(cartaoModel.getNumeroCartao());
+		cartoesService.obterSaldo(cartao.getNumeroCartao());
 	}
 }
