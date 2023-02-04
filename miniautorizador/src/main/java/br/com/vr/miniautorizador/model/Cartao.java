@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.mongodb.lang.NonNull;
 
-@Document(collection = "cartao")
+@Document
 public class Cartao {
 
 	@NonNull
@@ -15,7 +15,7 @@ public class Cartao {
 	@NonNull
 	private String numeroCartao;
 
-	private Double saldo;
+	private double saldo;
 
 	public Cartao(String senha, String numeroCartao) {
 		saldo = 500.0;
@@ -29,5 +29,9 @@ public class Cartao {
 
 	public String getNumeroCartao() {
 		return numeroCartao;
+	}
+	
+	public double getSaldo() {
+		return saldo;
 	}
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import br.com.vr.miniautorizador.model.Cartao;
 
 @Repository
-public interface AutorizadorRepository extends MongoRepository<Cartao, String> {
+public interface CartoesRepository extends MongoRepository<Cartao, String> {
 	
 
 }

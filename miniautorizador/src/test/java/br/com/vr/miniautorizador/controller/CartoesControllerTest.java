@@ -1,21 +1,23 @@
 package br.com.vr.miniautorizador.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.vr.miniautorizador.model.Cartao;
+import br.com.vr.miniautorizador.service.Impl.CartoesServiceImpl;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class AutorizadorControllerTest {
+public class CartoesControllerTest {
 	
 	@Autowired
 	private MockMvc mockMvc;
@@ -27,7 +29,7 @@ public class AutorizadorControllerTest {
 	public void criaCartao() throws Exception {
 		
 		String senha = "1234";
-		String numeroCartao = "6549873025634501";
+		String numeroCartao = "6549873025634506";
 		Cartao cartao = new Cartao(senha, numeroCartao);
 		
 		mockMvc.perform(post("/cartoes")
@@ -40,12 +42,23 @@ public class AutorizadorControllerTest {
 	public void criaCartaoExistente() throws Exception {
 		
 		String senha = "1234";
-		String numeroCartao = "6549873025634501";
+		String numeroCartao = "6549873025634503";
 		Cartao cartao = new Cartao(senha, numeroCartao);
 		
 		mockMvc.perform(post("/cartoes")
 				.contentType("application/json")
 				.content(objectMapper.writeValueAsString(cartao)))
 		.andExpect(status().isUnprocessableEntity());
+	}
+	
+	@Test
+	public void consultaSaldo(String numeroCartao) throws Exception {
+		
+		numeroCartao = "6549873025634501";
+		
+		mockMvc.perform(get("/cartoes/numeroCartao")
+				.contentType("application/json")
+				.param(numeroCartao, numeroCartao))
+		.andExpect(status().isOk());
 	}
 }

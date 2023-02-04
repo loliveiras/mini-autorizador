@@ -9,9 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import br.com.vr.miniautorizador.model.Cartao;
+import br.com.vr.miniautorizador.service.Impl.CartoesServiceImpl;
 
 @RunWith(SpringRunner.class)
-public class AutorizadorServiceTest {
+public class CartoesServiceTest {
 	
 	static Cartao cartaoModel;
 	
@@ -24,21 +25,21 @@ public class AutorizadorServiceTest {
 	static class AutorizadorServiceConfiguration {
 		
 		@Bean
-		public AutorizadorService autorizadorService() {
-			return new AutorizadorService();
+		public CartoesServiceImpl autorizadorService() {
+			return new CartoesServiceImpl();
 		}
 	}
 	
 	@Autowired
-	private AutorizadorService autorizadorService;
+	private CartoesServiceImpl autorizadorService;
 	
 	@Test
 	public void saveTest() {
-		autorizadorService.save(cartaoModel);
+		autorizadorService.criar(cartaoModel);
 	}
 	
 	@Test
 	public void findTest() throws Exception {
-		autorizadorService.find(cartaoModel.getNumeroCartao());
+		autorizadorService.obterSaldo(cartaoModel.getNumeroCartao());
 	}
 }
