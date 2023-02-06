@@ -48,14 +48,14 @@ public class CartoesControllerTest {
 	}
 	
 	@Test
-	public void criaCartaoExistenteTest() throws Exception {
+	public void criarCartaoExistenteTest() throws Exception {
 		
 		when(cartoesRepository.existsById(cartao.getNumeroCartao())).thenReturn(true);
 		
-		this.mockMvc.perform(post("/cartoes")
-				.contentType("application/json")
-				.content(objectMapper.writeValueAsString(cartao)))
-		.andExpect(status().isUnprocessableEntity());
+			this.mockMvc.perform(post("/cartoes")
+					.contentType("application/json")
+					.content(objectMapper.writeValueAsString(cartao)))
+			.andExpect(status().isUnprocessableEntity());
 		
 	}
 	
@@ -70,13 +70,13 @@ public class CartoesControllerTest {
 	}
 	
 	@Test
-	public void obterSaldoCartaInexistenteTest() throws Exception {
+	public void obterSaldoCartaoInexistenteTest() throws Exception {
 		
 		when(cartoesRepository.findById(cartao.getNumeroCartao())).thenReturn(Optional.empty());
 		
-		this.mockMvc.perform(get("/cartoes/" + cartao.getNumeroCartao())
-				.contentType("application/json"))
-		.andExpect(status().isNotFound());
+			this.mockMvc.perform(get("/cartoes/" + cartao.getNumeroCartao())
+					.contentType("application/json"))
+			.andExpect(status().isNotFound());
 	}
 	
 	@BeforeAll

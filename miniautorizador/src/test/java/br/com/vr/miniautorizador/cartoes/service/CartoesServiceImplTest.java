@@ -15,17 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import br.com.vr.miniautorizador.cartoes.model.Cartao;
 import br.com.vr.miniautorizador.cartoes.repository.CartoesRepository;
 import br.com.vr.miniautorizador.cartoes.service.Impl.CartoesServiceImpl;
+import br.com.vr.miniautorizador.exception.MiniAutorizadorException;
 import br.com.vr.miniautorizador.transacoes.model.Transacao;
 
 @ExtendWith(MockitoExtension.class)
 public class CartoesServiceImplTest {
 
 	private static Cartao cartao;
-
-	@BeforeAll
-	protected static void populaCartao() {
-		cartao = new Cartao("1234", "6549873025634501");
-	}
 
 	@Mock
 	private CartoesRepository cartoesRepository;
@@ -34,12 +30,11 @@ public class CartoesServiceImplTest {
 	private CartoesServiceImpl cartoesService;
 
 	@Test
-	public void saveCartaoTest() {
-
+	public void saveCartaoTest() throws MiniAutorizadorException {
 		when(cartoesRepository.save(cartao)).thenReturn(cartao);
 		when(cartoesRepository.existsById(cartao.getNumeroCartao())).thenReturn(false);
 
-		cartoesService.criar(cartao);
+		cartoesService.criarCartao(cartao);
 	}
 
 	@Test
@@ -47,11 +42,11 @@ public class CartoesServiceImplTest {
 
 		when(cartoesRepository.existsById(cartao.getNumeroCartao())).thenReturn(true);
 
-		assertThrows(IllegalArgumentException.class, () -> cartoesService.criar(cartao));
+		assertThrows(MiniAutorizadorException.class, () -> cartoesService.criarCartao(cartao));
 	}
 
 	@Test
-	public void obterSaldoTest() {
+	public void obterSaldoTest() throws MiniAutorizadorException {
 
 		when(cartoesRepository.findById(cartao.getNumeroCartao())).thenReturn(Optional.of(cartao));
 
@@ -63,14 +58,14 @@ public class CartoesServiceImplTest {
 
 		when(cartoesRepository.findById(cartao.getNumeroCartao())).thenReturn(Optional.empty());
 
-		assertThrows(IllegalArgumentException.class, () -> cartoesService.obterSaldo(cartao.getNumeroCartao()));
+		assertThrows(MiniAutorizadorException.class, () -> cartoesService.obterSaldo(cartao.getNumeroCartao()));
 	}
 
 	@Test
-	public void transacaoCartaoTest() {
+	public void transacaoCartaoTest() throws MiniAutorizadorException {
 		Transacao transacao = populaTransacao();
 
-		when(cartoesRepository.findById(cartao.getNumeroCartao())).thenReturn(Optional.of(cartao));
+		when(cartoesRepository.findById(transacao.getNumeroCartao())).thenReturn(Optional.of(cartao));
 		when(cartoesRepository.save(cartao)).thenReturn(cartao);
 
 		cartao.verificaSenha(transacao, cartao);
@@ -83,19 +78,18 @@ public class CartoesServiceImplTest {
 	public void transacaoCartaoInexistenteTest() {
 		Transacao transacao = populaTransacao();
 
-		when(cartoesRepository.findById(cartao.getNumeroCartao())).thenReturn(Optional.empty());
+		when(cartoesRepository.findById(transacao.getNumeroCartao())).thenReturn(Optional.empty());
 
-		assertThrows(IllegalArgumentException.class, () -> cartoesService.transacao(transacao));
+		assertThrows(MiniAutorizadorException.class, () -> cartoesService.transacao(transacao));
 	}
 
 	@Test
 	public void transacaoCartaoSenhaInvalidaTest() {
 		Transacao transacao = new Transacao("6549873025634501", "12345", 10.0);
 
-		when(cartoesRepository.findById(cartao.getNumeroCartao()))
-				.thenReturn(Optional.of(cartao));
+		when(cartoesRepository.findById(transacao.getNumeroCartao())).thenReturn(Optional.of(cartao));
 
-		assertThrows(IllegalArgumentException.class, () -> cartoesService.transacao(transacao));
+		assertThrows(MiniAutorizadorException.class, () -> cartoesService.transacao(transacao));
 	}
 
 	@Test
@@ -103,9 +97,14 @@ public class CartoesServiceImplTest {
 
 		Transacao transacao = new Transacao("6549873025634501", "1234", 600.0);
 
-		when(cartoesRepository.findById(cartao.getNumeroCartao())).thenReturn(Optional.of(cartao));
+		when(cartoesRepository.findById(transacao.getNumeroCartao())).thenReturn(Optional.of(cartao));
 
-		assertThrows(RuntimeException.class, () -> cartoesService.transacao(transacao));
+		assertThrows(MiniAutorizadorException.class, () -> cartoesService.transacao(transacao));
+	}
+	
+	@BeforeAll
+	protected static void populaCartao() {
+		cartao = new Cartao("6549873025634501", "1234");
 	}
 
 	private Transacao populaTransacao() {

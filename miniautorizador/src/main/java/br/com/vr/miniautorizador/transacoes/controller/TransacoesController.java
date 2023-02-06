@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.vr.miniautorizador.cartoes.service.CartoesService;
+import br.com.vr.miniautorizador.enums.MiniAutorizadorEnum;
+import br.com.vr.miniautorizador.exception.MiniAutorizadorException;
 import br.com.vr.miniautorizador.transacoes.model.Transacao;
 
 @RestController
@@ -19,16 +21,13 @@ public class TransacoesController {
 	private CartoesService cartoesService;
 
 	@PostMapping
-	public ResponseEntity<String> transacao(@RequestBody Transacao transacao) {
+	public ResponseEntity<String> transacao(@RequestBody Transacao transacao) throws MiniAutorizadorException {
 
 		try {
 			cartoesService.transacao(transacao);
-			return ResponseEntity.status(HttpStatus.CREATED).body("OK");
+			return ResponseEntity.status(HttpStatus.CREATED).body(MiniAutorizadorEnum.OK.name());
 
-		} catch (IllegalArgumentException e) {
-			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
-		
-		} catch (RuntimeException e) {
+		} catch (MiniAutorizadorException e) {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
 		}
 	}

@@ -7,46 +7,47 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import com.mongodb.lang.NonNull;
 
 import br.com.vr.miniautorizador.enums.MiniAutorizadorEnum;
+import br.com.vr.miniautorizador.exception.MiniAutorizadorException;
 import br.com.vr.miniautorizador.transacoes.model.Transacao;
 import lombok.Getter;
 
 @Document
 public class Cartao {
-
-	@NonNull
-	@Getter
-	private String senha;
 	
 	@Id
 	@NonNull
 	@Getter
 	private String numeroCartao;
 	
+	@NonNull
+	@Getter
+	private String senha;
+
 	@Getter
 	private double saldo;
 	
 	@Version
 	private int controleTransacao;
 
-	public Cartao(String senha, String numeroCartao) {
+	public Cartao(String numeroCartao, String senha) {
 		saldo = 500.0;
-		this.senha = senha;
 		this.numeroCartao = numeroCartao;
+		this.senha = senha;
 	}
 	
 	public void atualizaSaldo(Cartao cartao, double valor) {
 		cartao.saldo -= valor;
 	}
 	
-	public void verificaSaldo(Transacao transacao, Cartao cartao) {
+	public void verificaSaldo(Transacao transacao, Cartao cartao) throws MiniAutorizadorException {
 		if(!(cartao.getSaldo() >= transacao.getValor())) {
-			throw new RuntimeException(MiniAutorizadorEnum.SALDO_INSUFICIENTE.name());
+			throw new MiniAutorizadorException(MiniAutorizadorEnum.SALDO_INSUFICIENTE.name());
 		}
 	}
 	
-	public void verificaSenha(Transacao transacao, Cartao cartao) {
+	public void verificaSenha(Transacao transacao, Cartao cartao) throws MiniAutorizadorException {
 		if(!transacao.getSenhaCartao().equals(cartao.getSenha())) {
-			throw new IllegalArgumentException(MiniAutorizadorEnum.SENHA_INVALIDA.name());
+			throw new MiniAutorizadorException(MiniAutorizadorEnum.SENHA_INVALIDA.name());
  		}
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.vr.miniautorizador.cartoes.model.Cartao;
 import br.com.vr.miniautorizador.cartoes.service.CartoesService;
+import br.com.vr.miniautorizador.exception.MiniAutorizadorException;
 
 @RestController
 @RequestMapping("/cartoes")
@@ -21,25 +22,25 @@ public class CartoesController {
 	private CartoesService cartoesService;
 
 	@PostMapping
-	public ResponseEntity<Cartao> criaCartao(@RequestBody Cartao cartao) {
+	public ResponseEntity<Cartao> criarCartao(@RequestBody Cartao cartao) {
 
 		try {
-			cartoesService.criar(cartao);
+			cartoesService.criarCartao(cartao);
 			return ResponseEntity.status(HttpStatus.CREATED).body(cartao);
 
-		} catch (IllegalArgumentException e) {
+		} catch (MiniAutorizadorException e) {
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(cartao);
 		}
 	}
 
 	@GetMapping("{numeroCartao}")
-	public ResponseEntity<Double> obterSaldo(@PathVariable String numeroCartao) throws Exception {
+	public ResponseEntity<Double> obterSaldoCartao(@PathVariable String numeroCartao) {
 
 		try {
 			Cartao cartao = cartoesService.obterSaldo(numeroCartao);
 			return ResponseEntity.status(HttpStatus.OK).body(cartao.getSaldo());
 
-		} catch (IllegalArgumentException e) {
+		} catch (MiniAutorizadorException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
