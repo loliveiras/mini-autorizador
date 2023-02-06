@@ -6,5 +6,5 @@ public class MiniAutorizadorException extends Exception {
 
 	public MiniAutorizadorException(String name) {
 	}
-	 
+
 }

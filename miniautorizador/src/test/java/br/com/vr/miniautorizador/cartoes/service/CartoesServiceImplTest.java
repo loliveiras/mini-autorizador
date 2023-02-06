@@ -101,7 +101,7 @@ public class CartoesServiceImplTest {
 
 		assertThrows(MiniAutorizadorException.class, () -> cartoesService.transacao(transacao));
 	}
-	
+
 	@BeforeAll
 	protected static void populaCartao() {
 		cartao = new Cartao("6549873025634501", "1234");
