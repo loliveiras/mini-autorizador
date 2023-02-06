@@ -39,10 +39,22 @@ public class CartoesServiceImpl implements CartoesService {
 				.findById(transacao.getNumeroCartao())
 				.orElseThrow(() -> new MiniAutorizadorException(MiniAutorizadorEnum.CARTAO_INEXISTENTE.name()));
 
-		cartao.verificaSenha(transacao, cartao);
-		cartao.verificaSaldo(transacao, cartao);
+		verificaSenha(transacao, cartao);
+		verificaSaldo(transacao, cartao);
 		cartao.atualizaSaldo(cartao, transacao.getValor());
 
 		cartoesRepository.save(cartao);
+	}
+	
+	private void verificaSaldo(Transacao transacao, Cartao cartao) throws MiniAutorizadorException {
+		if(!(cartao.getSaldo() >= transacao.getValor())) {
+			throw new MiniAutorizadorException(MiniAutorizadorEnum.SALDO_INSUFICIENTE.name());
+		}
+	}
+
+	private void verificaSenha(Transacao transacao, Cartao cartao) throws MiniAutorizadorException {
+		if(!transacao.getSenhaCartao().equals(cartao.getSenha())) {
+			throw new MiniAutorizadorException(MiniAutorizadorEnum.SENHA_INVALIDA.name());
+ 		}
 	}
 }

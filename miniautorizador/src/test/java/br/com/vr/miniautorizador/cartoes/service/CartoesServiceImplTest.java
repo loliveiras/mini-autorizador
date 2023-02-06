@@ -68,9 +68,6 @@ public class CartoesServiceImplTest {
 		when(cartoesRepository.findById(transacao.getNumeroCartao())).thenReturn(Optional.of(cartao));
 		when(cartoesRepository.save(cartao)).thenReturn(cartao);
 
-		cartao.verificaSenha(transacao, cartao);
-		cartao.verificaSaldo(transacao, cartao);
-
 		cartoesService.transacao(transacao);
 	}
 
