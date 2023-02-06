@@ -12,13 +12,12 @@ import br.com.vr.miniautorizador.transacoes.model.Transacao;
 
 @Service
 public class CartoesServiceImpl implements CartoesService {
-
+	
 	@Autowired
 	private CartoesRepository cartoesRepository;
 
 	@Override
 	public Cartao criarCartao(Cartao cartao) throws MiniAutorizadorException {
-
 		boolean existe = cartoesRepository.existsById(cartao.getNumeroCartao());
 
 		if (existe)

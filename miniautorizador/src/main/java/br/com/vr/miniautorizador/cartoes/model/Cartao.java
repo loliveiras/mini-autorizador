@@ -13,7 +13,7 @@ import lombok.Getter;
 
 @Document
 public class Cartao {
-
+	
 	@Id
 	@NonNull
 	@Getter
