@@ -12,4 +12,10 @@ public class Transacao {
 	
 	@Getter
 	double valor;
+	
+	public Transacao(String numeroCartao, String senhaCartao, double valor) {
+		this.numeroCartao = numeroCartao;
+		this.senhaCartao = senhaCartao;
+		this.valor = valor;		
+	}
 }

@@ -8,7 +8,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.vr</groupId>
-	<artifactId>mini-autorizador-app</artifactId>
+	<artifactId>mini-autorizador</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>mini-autorizador</name>
 	<description>Processamento de trasações de Vale Alimentação e Vale Refeição</description>
@@ -58,6 +58,6 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-		<finalName>mini-autorizador-app</finalName>
+		<finalName>mini-autorizador</finalName>
 	</build>
 </project>

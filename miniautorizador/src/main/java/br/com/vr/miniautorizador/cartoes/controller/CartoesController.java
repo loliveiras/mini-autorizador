@@ -37,7 +37,7 @@ public class CartoesController {
 
 		try {
 			Cartao cartao = cartoesService.obterSaldo(numeroCartao);
-			return ResponseEntity.status(HttpStatus.OK).body(cartao.saldo());
+			return ResponseEntity.status(HttpStatus.OK).body(cartao.getSaldo());
 
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);

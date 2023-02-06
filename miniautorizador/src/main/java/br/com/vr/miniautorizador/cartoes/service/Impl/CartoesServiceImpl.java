@@ -10,14 +10,14 @@ import br.com.vr.miniautorizador.enums.MiniAutorizadorEnum;
 import br.com.vr.miniautorizador.transacoes.model.Transacao;
 
 @Service
-public class CartoesServiceImpl implements CartoesService  {
-	
+public class CartoesServiceImpl implements CartoesService {
+
 	@Autowired
 	private CartoesRepository cartoesRepository;
-	
+
 	@Override
 	public Cartao criar(Cartao cartao) {
-		
+
 		boolean existe = cartoesRepository.existsById(cartao.getNumeroCartao());
 
 		if (existe)
@@ -27,25 +27,22 @@ public class CartoesServiceImpl implements CartoesService  {
 
 	@Override
 	public Cartao obterSaldo(String numeroCartao) {
-		return  this.cartoesRepository
+		return this.cartoesRepository
 				.findById(numeroCartao)
 				.orElseThrow(() -> new IllegalArgumentException(MiniAutorizadorEnum.CARTAO_INEXISTENTE.name()));
 	}
 
 	@Override
 	public void transacao(Transacao transacao) {
-		
+
 		Cartao cartao = cartoesRepository
 				.findById(transacao.getNumeroCartao())
 				.orElseThrow(() -> new IllegalArgumentException(MiniAutorizadorEnum.CARTAO_INEXISTENTE.name()));
-		
-		if(!transacao.getSenhaCartao().equals(cartao.getSenha())) {
-			throw new RuntimeException(MiniAutorizadorEnum.SENHA_INVALIDA.name());
- 		}
-		if(!(cartao.saldo() >= transacao.getValor())) {
-			throw new RuntimeException(MiniAutorizadorEnum.SALDO_INSUFICIENTE.name());
-		}
+
+		cartao.verificaSenha(transacao, cartao);
+		cartao.verificaSaldo(transacao, cartao);
 		cartao.atualizaSaldo(cartao, transacao.getValor());
+
 		cartoesRepository.save(cartao);
 	}
 }

@@ -1,3 +1,3 @@
-FROM openjdk:8
-ADD target/mini-autorizador-app.jar app.jar
+FROM openjdk:11
+ADD target/mini-autorizador.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
