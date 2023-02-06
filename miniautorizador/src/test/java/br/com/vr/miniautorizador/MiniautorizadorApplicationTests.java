@@ -9,5 +9,4 @@ class MiniautorizadorApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

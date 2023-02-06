@@ -37,7 +37,6 @@ public class CartoesControllerTest {
 
 	@Test
 	public void criaCartaoTest() throws Exception {
-
 		when(cartoesRepository.existsById(cartao.getNumeroCartao())).thenReturn(false);
 		when(cartoesRepository.save(cartao)).thenReturn(cartao);
 
@@ -49,19 +48,17 @@ public class CartoesControllerTest {
 
 	@Test
 	public void criarCartaoExistenteTest() throws Exception {
-
 		when(cartoesRepository.existsById(cartao.getNumeroCartao())).thenReturn(true);
 
-			this.mockMvc.perform(post("/cartoes")
-					.contentType("application/json")
-					.content(objectMapper.writeValueAsString(cartao)))
-			.andExpect(status().isUnprocessableEntity());
+		this.mockMvc.perform(post("/cartoes")
+				.contentType("application/json")
+				.content(objectMapper.writeValueAsString(cartao)))
+		.andExpect(status().isUnprocessableEntity());
 
 	}
 
 	@Test
 	public void obterSaldoTest() throws Exception {
-
 		when(cartoesRepository.findById(cartao.getNumeroCartao())).thenReturn(Optional.of(cartao));
 
 		this.mockMvc.perform(get("/cartoes/" + cartao.getNumeroCartao())
@@ -71,12 +68,11 @@ public class CartoesControllerTest {
 
 	@Test
 	public void obterSaldoCartaoInexistenteTest() throws Exception {
-
 		when(cartoesRepository.findById(cartao.getNumeroCartao())).thenReturn(Optional.empty());
 
-			this.mockMvc.perform(get("/cartoes/" + cartao.getNumeroCartao())
-					.contentType("application/json"))
-			.andExpect(status().isNotFound());
+		this.mockMvc.perform(get("/cartoes/" + cartao.getNumeroCartao())
+				.contentType("application/json"))
+		.andExpect(status().isNotFound());
 	}
 
 	@BeforeAll

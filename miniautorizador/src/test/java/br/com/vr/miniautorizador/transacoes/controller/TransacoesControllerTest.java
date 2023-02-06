@@ -37,7 +37,6 @@ public class TransacoesControllerTest {
 
 	@Test
 	public void transacaoCartaoTest() throws Exception {
-
 		Cartao cartao = new Cartao("6549873025634501", "1234");
 
 		when(cartoesRepository.findById(transacao.getNumeroCartao())).thenReturn(Optional.of(cartao));
@@ -50,7 +49,6 @@ public class TransacoesControllerTest {
 
 	@Test
 	public void transacaoCartaoNegadaTest() throws Exception {
-
 		when(cartoesRepository.findById(transacao.getNumeroCartao())).thenReturn(Optional.empty());
 
 		this.mockMvc.perform(post("/transacoes")

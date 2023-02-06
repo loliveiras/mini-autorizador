@@ -39,7 +39,6 @@ public class CartoesServiceImplTest {
 
 	@Test
 	public void saveCartaoExisteTest() {
-
 		when(cartoesRepository.existsById(cartao.getNumeroCartao())).thenReturn(true);
 
 		assertThrows(MiniAutorizadorException.class, () -> cartoesService.criarCartao(cartao));
@@ -47,7 +46,6 @@ public class CartoesServiceImplTest {
 
 	@Test
 	public void obterSaldoTest() throws MiniAutorizadorException {
-
 		when(cartoesRepository.findById(cartao.getNumeroCartao())).thenReturn(Optional.of(cartao));
 
 		cartoesService.obterSaldo(cartao.getNumeroCartao());
@@ -55,7 +53,6 @@ public class CartoesServiceImplTest {
 
 	@Test
 	public void obterSaldoCartaoInexistenteTest() {
-
 		when(cartoesRepository.findById(cartao.getNumeroCartao())).thenReturn(Optional.empty());
 
 		assertThrows(MiniAutorizadorException.class, () -> cartoesService.obterSaldo(cartao.getNumeroCartao()));
@@ -91,7 +88,6 @@ public class CartoesServiceImplTest {
 
 	@Test
 	public void transacaoCartaoSaldoInsuficienteTest() {
-
 		Transacao transacao = new Transacao("6549873025634501", "1234", 600.0);
 
 		when(cartoesRepository.findById(transacao.getNumeroCartao())).thenReturn(Optional.of(cartao));

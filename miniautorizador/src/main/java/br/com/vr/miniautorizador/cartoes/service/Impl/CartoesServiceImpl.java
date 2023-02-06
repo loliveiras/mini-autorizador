@@ -34,7 +34,6 @@ public class CartoesServiceImpl implements CartoesService {
 
 	@Override
 	public void transacao(Transacao transacao) throws MiniAutorizadorException {
-
 		Cartao cartao = cartoesRepository
 				.findById(transacao.getNumeroCartao())
 				.orElseThrow(() -> new MiniAutorizadorException(MiniAutorizadorEnum.CARTAO_INEXISTENTE.name()));
