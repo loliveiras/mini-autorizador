@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<configuration scan="true" scanPeriod="3 seconds">
-  <jmxConfigurator />
-
+<configuration>
   <statusListener class=
       	"ch.qos.logback.core.status.OnConsoleStatusListener"/>
 
