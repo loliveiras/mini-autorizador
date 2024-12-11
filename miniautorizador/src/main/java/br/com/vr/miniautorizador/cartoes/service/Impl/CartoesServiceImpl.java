@@ -45,6 +45,11 @@ public class CartoesServiceImpl implements CartoesService {
 		cartaoValidator.validarCartaoInexistente(numeroCartao, cartoesRepository);
 		return cartoesRepository.findById(numeroCartao).get().getSaldo();
 	}
+	/*
+	 * ESTE METODO FOI DESENVOLVIDO PARA REALIZAR A AUTORIZACAO DE UMA TRANSACAO DE CARTAO DE CREDITO.
+	 * FOI UTILIZADO UMA ABORDAGEM DE ATUALIZACAO ATOMICA QUE GARANTE A CONSISTENCIA DOS DADOS
+	 * E A SEGURANCA DA OPERACAO.
+	 */
 	public void autorizarTransacao(TransacaoCartao transacao) throws CartoesException {
 		
 		cartaoValidator.validarTransacaoCartao(transacao, cartoesRepository);

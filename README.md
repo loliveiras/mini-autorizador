@@ -11,7 +11,7 @@ Este é o projeto Mini Autorizador, uma aplicação simples para gerenciar regis
 ## Tecnologias Utilizadas
 
 - Java
-- Spring Boot
+- Spring(boot, security,data)
 - MongoDB, Mongo Express
 - Docker
 
@@ -50,9 +50,11 @@ Este é o projeto Mini Autorizador, uma aplicação simples para gerenciar regis
 4. Configure o ambiente de teste, se necessário.
 5. Execute a coleção de testes para verificar se todas as funcionalidades estão operando conforme esperado.
 
-[OBS: Utilizar os contratos disponíveis no link após start da aplicação:] (http://localhost:8080/swagger-ui.html#/cartoes-controller)
+OBS: Utilizar os contratos disponíveis no link após start da aplicação: (http://localhost:8080/swagger-ui.html#/cartoes-controller)
+
+Na collection do POSTMAN existe alguns requests duplicados/repetidos, podem ser utilizados para teste de estresse e/ou execuções simultaneas.
 
 ## Informações adicionais
-[Após realizar os testes é possível conferir os dados registrados na collection: gerenciamento_cartoes através do link:] 
+Após realizar os testes é possível conferir os dados registrados na collection: gerenciamento_cartoes através do link: (http://localhost:8081/) 
 
 MONGO-EXPRESS: (http://localhost:8081/)
