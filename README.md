@@ -6,7 +6,7 @@ Este é o projeto Mini Autorizador, uma aplicação simples para gerenciar regis
 
 - Registro de cartões
 - Consulta de saldo do cartão
-- Transação de cartões como meio de pagamento
+- Autorização de transação de cartões como meio de pagamento
 
 ## Tecnologias Utilizadas
 
