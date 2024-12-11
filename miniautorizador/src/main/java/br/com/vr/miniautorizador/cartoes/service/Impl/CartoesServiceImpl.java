@@ -29,7 +29,10 @@ public class CartoesServiceImpl implements CartoesService {
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
-
+	
+	/*
+	 * NESTE METODO FOI ADICIONADO UMA CODIFICACAO DE SENHA DO CARTAO, PARA QUE A MESMA NAO FIQUE EXPOSTA.
+	 */
 	public Cartoes registrarCartao(Cartoes cartao) throws CartoesException {
 		cartaoValidator.validarCartaoExistente(cartao, cartoesRepository);
 		String senhaCodificada = passwordEncoder.encode(cartao.getSenha());
@@ -42,8 +45,7 @@ public class CartoesServiceImpl implements CartoesService {
 		cartaoValidator.validarCartaoInexistente(numeroCartao, cartoesRepository);
 		return cartoesRepository.findById(numeroCartao).get().getSaldo();
 	}
-	
-	public void processarTransacao(TransacaoCartao transacao) throws CartoesException {
+	public void autorizarTransacao(TransacaoCartao transacao) throws CartoesException {
 		
 		cartaoValidator.validarTransacaoCartao(transacao, cartoesRepository);
         

@@ -8,5 +8,5 @@ public interface CartoesService {
 
 	public Cartoes registrarCartao(Cartoes cartao) throws CartoesException;
 	public double obterSaldoCartao(String numeroCartao) throws CartoesException;
-	public void processarTransacao(TransacaoCartao transacao) throws CartoesException;
+	public void autorizarTransacao(TransacaoCartao transacao) throws CartoesException;
 }

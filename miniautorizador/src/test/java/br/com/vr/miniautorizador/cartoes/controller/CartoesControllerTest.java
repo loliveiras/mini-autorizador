@@ -105,7 +105,7 @@ class CartoesControllerTest {
     @Test
     void testTransacaoCartaoQuandoSucessoDeveRetornarCreated() throws Exception {
         TransacaoCartao transacao = new TransacaoCartao("123456789", "senha123", 50.0);
-        doNothing().when(cartoesService).processarTransacao(transacao);
+        doNothing().when(cartoesService).autorizarTransacao(transacao);
 
         mockMvc.perform(post("/transacoes")
         		.with(httpBasic("username", "password"))

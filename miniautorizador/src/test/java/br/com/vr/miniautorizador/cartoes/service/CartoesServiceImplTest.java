@@ -74,7 +74,7 @@ class CartoesServiceImplTest {
         when(mongoTemplate.findAndModify(any(Query.class), any(Update.class), eq(Cartoes.class))).thenReturn(cartao);
         cartao.setSaldo(cartao.getSaldo() - transacao.getValorTransacao());
 
-        cartoesService.processarTransacao(transacao);
+        cartoesService.autorizarTransacao(transacao);
 
         assertEquals(400.0, cartao.getSaldo());
         verify(mongoTemplate, times(1)).findAndModify(any(Query.class), any(Update.class), eq(Cartoes.class));
@@ -115,7 +115,7 @@ class CartoesServiceImplTest {
         when(cartoesRepository.findById(transacao.getNumeroCartao())).thenReturn(java.util.Optional.of(cartao));
         when(passwordEncoder.matches(transacao.getSenhaCartao(), cartao.getSenha())).thenReturn(false);
         
-        cartoesService.processarTransacao(transacao);
+        cartoesService.autorizarTransacao(transacao);
 
         assertEquals(CartoesEnum.SENHA_INVALIDA.name(), "SENHA_INVALIDA");
     }
@@ -128,7 +128,7 @@ class CartoesServiceImplTest {
             .validarTransacaoCartao(transacao, cartoesRepository);
 
         CartoesException exception = assertThrows(CartoesException.class, () -> {
-            cartoesService.processarTransacao(transacao);
+            cartoesService.autorizarTransacao(transacao);
         });
 
         assertEquals(CartoesEnum.CARTAO_INEXISTENTE.name(), exception.getMessage());
@@ -143,7 +143,7 @@ class CartoesServiceImplTest {
         when(mongoTemplate.findAndModify(any(Query.class), any(Update.class), eq(Cartoes.class))).thenReturn(null);
         
         CartoesException exception = assertThrows(CartoesException.class, () -> {
-            cartoesService.processarTransacao(transacao);
+            cartoesService.autorizarTransacao(transacao);
         });
 
         assertEquals(CartoesEnum.SALDO_INSUFICIENTE.name(), exception.getMessage());

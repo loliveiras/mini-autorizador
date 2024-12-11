@@ -33,35 +33,35 @@ public class CartoesController {
 
 		try {
 			cartaoService.registrarCartao(cartao);
-			logger.info("Cartão " + cartao.getNumeroCartao() + " registrado com sucesso");
+			logger.info("Cartao " + cartao.getNumeroCartao() + " registrado com sucesso");
 			return ResponseEntity.status(HttpStatus.CREATED).body(cartao);
 			
 		} catch (CartoesException e) {
-			logger.info("Cartão " + cartao.getNumeroCartao() + " já existe cadastrado no sistema");
+			logger.info("Cartao " + cartao.getNumeroCartao() + " ja existe cadastrado no sistema");
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(cartao);
 		}
 	}
 	@GetMapping("/cartoes/{numeroCartao}")
 	public ResponseEntity<Double> obterSaldoCartao(@PathVariable String numeroCartao) {
-		logger.info("Iniciando método obterSaldoCartao()");
+		logger.info("Iniciando metodo obterSaldoCartao()");
 
 		try {
-			logger.info("Saldo do Cartão " + numeroCartao + " obtido com sucesso");
+			logger.info("Saldo do cartao " + numeroCartao + " obtido com sucesso");
 			return ResponseEntity.status(HttpStatus.OK).body(cartaoService.obterSaldoCartao(numeroCartao));
 		} catch (CartoesException e) {
-			logger.info("Cartao " + numeroCartao + " não encontrado no sistema");
+			logger.info("Cartao " + numeroCartao + " nao encontrado no sistema");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
 	@PostMapping("/transacoes")
-	public ResponseEntity<String> transacaoCartao(@RequestBody TransacaoCartao transacao) throws CartoesException {
-		logger.info("Iniciando método transacao()");
+	public ResponseEntity<String> autorizacaoTransacaoCartao(@RequestBody TransacaoCartao transacao) throws CartoesException {
+		logger.info("Iniciando método autorizacaoTransacaoCartao()");
 		try {
-			cartaoService.processarTransacao(transacao);
-			logger.info("Transacao do cartão " + transacao.getNumeroCartao() + " finalizada com sucesso");
+			cartaoService.autorizarTransacao(transacao);
+			logger.info("Autorizacao para transacao do cartao " + transacao.getNumeroCartao() + " finalizada com sucesso");
 			return ResponseEntity.status(HttpStatus.CREATED).body(CartoesEnum.OK.name());
 		} catch (CartoesException e) {
-			logger.info("Transação do cartão " + transacao.getNumeroCartao() + " negada pelo motivo: " + e.getMessage());
+			logger.info("Autorizacao para transacao " + transacao.getNumeroCartao() + " negada pelo motivo: " + e.getMessage());
 			return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
 		}
 	}
