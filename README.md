@@ -53,4 +53,4 @@ Este é o projeto Mini Autorizador, uma aplicação simples para gerenciar regis
 [OBS: Utilizar os contratos disponíveis no link após start da aplicação:] (http://localhost:8080/swagger-ui.html#/cartoes-controller)
 
 ## Informações adicionais
-[Após realizar os testes é possível conferir os dados registrados na collection: gerenciamento_cartoes através do link: (http://localhost:8081/)]
+[Após realizar os testes é possível conferir os dados registrados na collection: gerenciamento_cartoes através do link:] (http://localhost:8081/)
