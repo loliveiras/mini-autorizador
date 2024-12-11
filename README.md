@@ -1,12 +1,12 @@
 # Mini Autorizador
 
-Este é o projeto Mini Autorizador, uma aplicação simples para gerenciar registros e transações de cartões.
+Este é o projeto Mini Autorizador, uma aplicação simples para gerenciar registros e transações de cartões de Vale Refeição e Vale Alimentação.
 
 ## Funcionalidades
 
 - Registro de cartões
 - Consulta de saldo do cartão
-- Transação de cartões
+- Transação de cartões como meio de pagamento
 
 ## Tecnologias Utilizadas
 
