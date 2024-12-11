@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "340fc5ca-6f16-44da-8501-fae3fd3d0710",
+		"_postman_id": "ef4fdd7c-ebac-417a-a4b3-3a8d1916442f",
 		"name": "MINI AUTORIZADOR",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11238912"
 	},
 	"item": [
 		{
@@ -58,7 +59,142 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"numeroCartao\": \"6549873025632906\",\r\n    \"senhaCartao\": \"1234\",\r\n    \"valor\": 250.0\r\n}",
+					"raw": "{\r\n    \"numeroCartao\": \"6549873025632907\",\r\n    \"senhaCartao\": \"1234\",\r\n    \"valor\": 500.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/transacoes",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transacoes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Realizar transação Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"numeroCartao\": \"6549873025632908\",\r\n    \"senhaCartao\": \"1234\",\r\n    \"valor\": 10.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/transacoes",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transacoes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Realizar transação Copy 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"numeroCartao\": \"6549873025632908\",\r\n    \"senhaCartao\": \"1234\",\r\n    \"valor\": 10.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/transacoes",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transacoes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Realizar transação Copy 3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"numeroCartao\": \"6549873025632907\",\r\n    \"senhaCartao\": \"1234\",\r\n    \"valor\": 50.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/transacoes",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transacoes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Realizar transação Copy 4",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"numeroCartao\": \"6549873025632907\",\r\n    \"senhaCartao\": \"1234\",\r\n    \"valor\": 50.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/transacoes",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"transacoes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Realizar transação Copy 5",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"numeroCartao\": \"6549873025632907\",\r\n    \"senhaCartao\": \"1234\",\r\n    \"valor\": 50.0\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
