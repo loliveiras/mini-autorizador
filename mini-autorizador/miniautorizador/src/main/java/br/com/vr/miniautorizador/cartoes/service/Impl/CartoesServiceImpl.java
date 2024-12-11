@@ -8,21 +8,21 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.vr.miniautorizador.cartoes.model.Cartao;
+import br.com.vr.miniautorizador.cartoes.model.Cartoes;
+import br.com.vr.miniautorizador.cartoes.model.TransacaoCartao;
 import br.com.vr.miniautorizador.cartoes.repository.CartoesRepository;
-import br.com.vr.miniautorizador.cartoes.service.CartaoService;
-import br.com.vr.miniautorizador.exception.MiniAutorizadorException;
-import br.com.vr.miniautorizador.transacoes.ValidarCartao;
-import br.com.vr.miniautorizador.transacoes.model.TransacaoCartao;
+import br.com.vr.miniautorizador.cartoes.service.CartoesService;
+import br.com.vr.miniautorizador.cartoes.validation.CartoesValidator;
+import br.com.vr.miniautorizador.exception.CartoesException;
 
 @Service
-public class CartoesServiceImpl implements CartaoService {
+public class CartoesServiceImpl implements CartoesService {
 	
 	@Autowired
 	private CartoesRepository cartoesRepository;
 	
 	@Autowired
-	private ValidarCartao validarCartao;
+	private CartoesValidator cartaoValidator;
 	
 	@Autowired
     private MongoTemplate mongoTemplate;
@@ -30,22 +30,22 @@ public class CartoesServiceImpl implements CartaoService {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
-	public Cartao registrarCartao(Cartao cartao) throws MiniAutorizadorException {
-		validarCartao.validarCartaoExistente(cartao, cartoesRepository);
+	public Cartoes registrarCartao(Cartoes cartao) throws CartoesException {
+		cartaoValidator.validarCartaoExistente(cartao, cartoesRepository);
 		String senhaCodificada = passwordEncoder.encode(cartao.getSenha());
 		cartao.setSenha(senhaCodificada);
 		cartao.setSaldo(500.0);
 		cartoesRepository.save(cartao);
 		return cartao;
 	}
-	public double obterSaldoCartao(String numeroCartao) throws MiniAutorizadorException {
-		validarCartao.validarCartaoInexistente(numeroCartao, cartoesRepository);
+	public double obterSaldoCartao(String numeroCartao) throws CartoesException {
+		cartaoValidator.validarCartaoInexistente(numeroCartao, cartoesRepository);
 		return cartoesRepository.findById(numeroCartao).get().getSaldo();
 	}
 	
-	public void processarTransacao(TransacaoCartao transacao) throws MiniAutorizadorException {
+	public void processarTransacao(TransacaoCartao transacao) throws CartoesException {
 		
-		validarCartao.validaTransacaoCartao(transacao, cartoesRepository);
+		cartaoValidator.validarTransacaoCartao(transacao, cartoesRepository);
         
 		Query query = new Query();
         query.addCriteria(Criteria.where("_id").is(transacao.getNumeroCartao())
@@ -54,7 +54,7 @@ public class CartoesServiceImpl implements CartaoService {
         Update update = new Update();
         update.inc("saldo", -transacao.getValorTransacao());
         
-        Cartao cartao = mongoTemplate.findAndModify(query, update, Cartao.class);
-        validarCartao.validarSaldoDisponivelCartao(cartao);
+        Cartoes cartao = mongoTemplate.findAndModify(query, update, Cartoes.class);
+        cartaoValidator.validarSaldoDisponivelCartao(cartao);
 	}
 }

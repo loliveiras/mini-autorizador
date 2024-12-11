@@ -9,8 +9,8 @@ import com.mongodb.lang.NonNull;
 import lombok.Getter;
 import lombok.Setter;
 
-@Document(collection = "GERENCIAMENTO-CARTOES")
-public class Cartao {
+@Document(collection = "gerenciamento_cartoes")
+public class Cartoes {
 	
 	@Id
 	@NonNull
@@ -27,7 +27,7 @@ public class Cartao {
 	@Setter
 	private double saldo;
 
-	public Cartao(String numeroCartao, String senha) {
+	public Cartoes(String numeroCartao, String senha) {
 		this.numeroCartao = numeroCartao;
 		this.senha = senha;
 	}

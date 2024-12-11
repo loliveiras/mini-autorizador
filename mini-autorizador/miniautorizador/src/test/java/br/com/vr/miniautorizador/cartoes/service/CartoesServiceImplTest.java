@@ -1,14 +1,16 @@
 package br.com.vr.miniautorizador.cartoes.service;
 
 
-import br.com.vr.miniautorizador.cartoes.model.Cartao;
+import br.com.vr.miniautorizador.cartoes.model.Cartoes;
+import br.com.vr.miniautorizador.cartoes.model.TransacaoCartao;
 import br.com.vr.miniautorizador.cartoes.repository.CartoesRepository;
-import br.com.vr.miniautorizador.cartoes.service.CartaoService;
 import br.com.vr.miniautorizador.cartoes.service.Impl.CartoesServiceImpl;
-import br.com.vr.miniautorizador.enums.MiniAutorizadorEnum;
-import br.com.vr.miniautorizador.exception.MiniAutorizadorException;
-import br.com.vr.miniautorizador.transacoes.ValidarCartao;
-import br.com.vr.miniautorizador.transacoes.model.TransacaoCartao;
+import br.com.vr.miniautorizador.cartoes.validation.CartoesValidator;
+import br.com.vr.miniautorizador.enums.CartoesEnum;
+import br.com.vr.miniautorizador.exception.CartoesException;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,19 +20,13 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import static org.mockito.Mockito.*;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 class CartoesServiceImplTest {
 
     @Mock
     private CartoesRepository cartoesRepository;
 
     @Mock
-    private ValidarCartao validarCartao;
+    private CartoesValidator cartoesValidator;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -41,21 +37,21 @@ class CartoesServiceImplTest {
     @InjectMocks
     private CartoesServiceImpl cartoesService;
 
-    private Cartao cartao;
+    private Cartoes cartao;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        cartao = new Cartao("123456789", "senha123");
+        cartao = new Cartoes("123456789", "senha123");
         cartao.setSaldo(500.0);
     }
 
     @Test
-    void testRegistrarCartao() throws MiniAutorizadorException {
+    void deveRegistrarCartaoComSucessoQuandoNaoExistirNoSistema() throws CartoesException {
         when(cartoesRepository.existsById(cartao.getNumeroCartao())).thenReturn(false);
         when(passwordEncoder.encode(cartao.getSenha())).thenReturn("senhaCodificada");
 
-        Cartao cartaoRegistrado = cartoesService.registrarCartao(cartao);
+        Cartoes cartaoRegistrado = cartoesService.registrarCartao(cartao);
 
         assertNotNull(cartaoRegistrado);
         assertEquals("senhaCodificada", cartaoRegistrado.getSenha());
@@ -63,7 +59,7 @@ class CartoesServiceImplTest {
         verify(cartoesRepository, times(1)).save(cartao);
     }
     @Test
-    void testObterSaldoCartao() throws MiniAutorizadorException {
+    void deveRetornarSaldoDoCartaoQuandoExistirNoSistema() throws CartoesException {
         when(cartoesRepository.findById(cartao.getNumeroCartao())).thenReturn(java.util.Optional.of(cartao));
 
         double saldo = cartoesService.obterSaldoCartao(cartao.getNumeroCartao());
@@ -71,44 +67,47 @@ class CartoesServiceImplTest {
         assertEquals(500.0, saldo);
     }
     @Test
-    void testProcessarTransacao() throws MiniAutorizadorException {
+    void deveProcessarTransacaoComSucessoQuandoCartaoExistirESaldoSuficiente() throws CartoesException {
         TransacaoCartao transacao = new TransacaoCartao("123456789", "senha123", 100.0);
 
         when(cartoesRepository.findById(transacao.getNumeroCartao())).thenReturn(java.util.Optional.of(cartao));
-        when(mongoTemplate.findAndModify(any(Query.class), any(Update.class), eq(Cartao.class))).thenReturn(cartao);
+        when(mongoTemplate.findAndModify(any(Query.class), any(Update.class), eq(Cartoes.class))).thenReturn(cartao);
         cartao.setSaldo(cartao.getSaldo() - transacao.getValorTransacao());
 
         cartoesService.processarTransacao(transacao);
 
         assertEquals(400.0, cartao.getSaldo());
-        verify(mongoTemplate, times(1)).findAndModify(any(Query.class), any(Update.class), eq(Cartao.class));
+        verify(mongoTemplate, times(1)).findAndModify(any(Query.class), any(Update.class), eq(Cartoes.class));
     }
     @Test
-    void testRegistrarCartaoExistente() throws MiniAutorizadorException {
-        when(validarCartao.validarCartaoExistente(cartao, cartoesRepository)).
-        thenThrow(new MiniAutorizadorException(MiniAutorizadorEnum.CARTAO_JA_EXISTE.name()));
+    void deveLancarExcecaoQuandoCartaoJaExistirNoSistema() throws CartoesException {
+        when(cartoesRepository.existsById(cartao.getNumeroCartao())).thenReturn(true);
+        
+        doThrow(new CartoesException(CartoesEnum.CARTAO_JA_REGISTRADO.name()))
+            .when(cartoesValidator).validarCartaoExistente(cartao, cartoesRepository);
 
-        MiniAutorizadorException exception = assertThrows(MiniAutorizadorException.class, () -> {
+        CartoesException exception = assertThrows(CartoesException.class, () -> {
             cartoesService.registrarCartao(cartao);
         });
 
-        assertEquals(MiniAutorizadorEnum.CARTAO_JA_EXISTE.name(), exception.getMessage());
+        assertEquals(CartoesEnum.CARTAO_JA_REGISTRADO.name(), exception.getMessage());
+        verify(cartoesValidator, times(1)).validarCartaoExistente(cartao, cartoesRepository);
     }
     @Test
-    void testObterSaldoCartaoNaoExistente() throws MiniAutorizadorException {
+    void deveLancarExcecaoQuandoCartaoNaoExistirNoSistema() throws CartoesException {
         when(cartoesRepository.findById(cartao.getNumeroCartao())).thenReturn(java.util.Optional.empty());
         
-        doThrow(new MiniAutorizadorException(MiniAutorizadorEnum.CARTAO_INEXISTENTE.name()))
-        .when(validarCartao).validarCartaoInexistente(cartao.getNumeroCartao(), cartoesRepository);
+        doThrow(new CartoesException(CartoesEnum.CARTAO_INEXISTENTE.name()))
+        .when(cartoesValidator).validarCartaoInexistente(cartao.getNumeroCartao(), cartoesRepository);
 
-        MiniAutorizadorException exception = assertThrows(MiniAutorizadorException.class, () -> {
+        CartoesException exception = assertThrows(CartoesException.class, () -> {
             cartoesService.obterSaldoCartao(cartao.getNumeroCartao());
         });
 
-        assertEquals(MiniAutorizadorEnum.CARTAO_INEXISTENTE.name(), exception.getMessage());
+        assertEquals(CartoesEnum.CARTAO_INEXISTENTE.name(), exception.getMessage());
     }
     @Test
-    void testProcessarTransacao_QuandoSenhaInvalida_DeveLancarExcecao() throws MiniAutorizadorException {
+    void deveLancarExcecaoQuandoSenhaCartaoForInvalida() throws CartoesException {
         cartao.setSenha("senhaCodificada");
         
         TransacaoCartao transacao = new TransacaoCartao("123456789", "senhaIncorreta", 100.0);
@@ -118,39 +117,39 @@ class CartoesServiceImplTest {
         
         cartoesService.processarTransacao(transacao);
 
-        assertEquals(MiniAutorizadorEnum.SENHA_INVALIDA.name(), "SENHA_INVALIDA");
+        assertEquals(CartoesEnum.SENHA_INVALIDA.name(), "SENHA_INVALIDA");
     }
     @Test
-    void testProcessarTransacao_QuandoCartaoInexistente_DeveLancarExcecao() throws MiniAutorizadorException {
+    void deveLancarExcecaoQuandoCartaoNaoExistirParaProcessarTransacao() throws CartoesException {
         TransacaoCartao transacao = new TransacaoCartao("123456789", "senha123", 100.0);
 
-        doThrow(new MiniAutorizadorException(MiniAutorizadorEnum.CARTAO_INEXISTENTE.name()))
-            .when(validarCartao)
-            .validaTransacaoCartao(transacao, cartoesRepository);
+        doThrow(new CartoesException(CartoesEnum.CARTAO_INEXISTENTE.name()))
+            .when(cartoesValidator)
+            .validarTransacaoCartao(transacao, cartoesRepository);
 
-        MiniAutorizadorException exception = assertThrows(MiniAutorizadorException.class, () -> {
+        CartoesException exception = assertThrows(CartoesException.class, () -> {
             cartoesService.processarTransacao(transacao);
         });
 
-        assertEquals(MiniAutorizadorEnum.CARTAO_INEXISTENTE.name(), exception.getMessage());
+        assertEquals(CartoesEnum.CARTAO_INEXISTENTE.name(), exception.getMessage());
     }
     @Test
-    void testProcessarTransacaoSaldoInsuficiente() throws MiniAutorizadorException {
+    void deveLancarExcecaoQuandoSaldoDoCartaoForInsuficienteParaTransacao() throws CartoesException {
         TransacaoCartao transacao = new TransacaoCartao("123456789", "senha123",  1000.0);
         
-        doThrow(new MiniAutorizadorException(MiniAutorizadorEnum.SALDO_INSUFICIENTE.name()))
-        .when(validarCartao).validarSaldoDisponivelCartao(null);
+        doThrow(new CartoesException(CartoesEnum.SALDO_INSUFICIENTE.name()))
+        .when(cartoesValidator).validarSaldoDisponivelCartao(null);
 
-        when(mongoTemplate.findAndModify(any(Query.class), any(Update.class), eq(Cartao.class))).thenReturn(null);
+        when(mongoTemplate.findAndModify(any(Query.class), any(Update.class), eq(Cartoes.class))).thenReturn(null);
         
-        MiniAutorizadorException exception = assertThrows(MiniAutorizadorException.class, () -> {
+        CartoesException exception = assertThrows(CartoesException.class, () -> {
             cartoesService.processarTransacao(transacao);
         });
 
-        assertEquals(MiniAutorizadorEnum.SALDO_INSUFICIENTE.name(), exception.getMessage());
+        assertEquals(CartoesEnum.SALDO_INSUFICIENTE.name(), exception.getMessage());
     }
     @Test
-    void testRegistrarCartao_QuandoErroNaCriptografia_DeveLancarExcecao() throws MiniAutorizadorException {
+    void deveLancarExcecaoQuandoHouverErroNaCriptografiaDaSenhaDoCartao() throws CartoesException {
         when(passwordEncoder.encode(cartao.getSenha())).thenThrow(new RuntimeException("Erro na criptografia"));
 
         assertThrows(RuntimeException.class, () -> {
@@ -158,16 +157,16 @@ class CartoesServiceImplTest {
         });
     }
     @Test
-    public void testValidarCartaoExistente_QuandoCartaoJaExiste_DeveLancarExcecao() throws MiniAutorizadorException {
+    void deveLancarExcecaoQuandoCartaoJaExistirNoSistemaDuranteValidacao() throws CartoesException {
         when(cartoesRepository.existsById(cartao.getNumeroCartao())).thenReturn(true);
 
-        doThrow(new MiniAutorizadorException(MiniAutorizadorEnum.CARTAO_JA_EXISTE.name()))
-            .when(validarCartao).validarCartaoExistente(cartao, cartoesRepository);
+        doThrow(new CartoesException(CartoesEnum.CARTAO_JA_REGISTRADO.name()))
+            .when(cartoesValidator).validarCartaoExistente(cartao, cartoesRepository);
 
-        MiniAutorizadorException exception = assertThrows(MiniAutorizadorException.class, () -> {
-            validarCartao.validarCartaoExistente(cartao, cartoesRepository);
+        CartoesException exception = assertThrows(CartoesException.class, () -> {
+            cartoesValidator.validarCartaoExistente(cartao, cartoesRepository);
         });
 
-        assertEquals(MiniAutorizadorEnum.CARTAO_JA_EXISTE.name(), exception.getMessage());
+        assertEquals(CartoesEnum.CARTAO_JA_REGISTRADO.name(), exception.getMessage());
     }
 }

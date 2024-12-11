@@ -1,6 +1,7 @@
-package br.com.vr.miniautorizador.transacoes.model;
+package br.com.vr.miniautorizador.cartoes.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 public class TransacaoCartao {
 
@@ -8,6 +9,7 @@ public class TransacaoCartao {
 	private String numeroCartao;
 
 	@Getter
+	@Setter
 	private String senhaCartao;
 
 	@Getter

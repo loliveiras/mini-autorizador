@@ -3,7 +3,7 @@ version: "3.7"
 services:
   mini-autorizador:
     build: ./
-    container_name: "mini-autorizador"
+    container_name: "miniautorizador"
     ports:
       - 8080:8080
   
@@ -38,14 +38,14 @@ services:
     depends_on:
       - mongo
 
-  #mysql:
-   # image: mysql:5.7
-    #hostname: mysql
-    #container_name: mysql
-    #restart: always
-    #ports:
-    # - "3306:3306"
-    #environment:
-     # MYSQL_DATABASE: miniautorizador
-      #MYSQL_ROOT_PASSWORD:
-      #MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+#  mysql:
+#    image: mysql:5.7
+#    hostname: mysql
+#    container_name: mysql
+#    restart: always
+#    ports:
+#     - "3306:3306"
+#    environment:
+#      MYSQL_DATABASE: miniautorizador
+#      MYSQL_ROOT_PASSWORD:
+#      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"

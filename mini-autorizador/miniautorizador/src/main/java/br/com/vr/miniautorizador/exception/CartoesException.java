@@ -1,10 +1,10 @@
 package br.com.vr.miniautorizador.exception;
 
-public class MiniAutorizadorException extends Exception {
+public class CartoesException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 	
-	public MiniAutorizadorException(String message) {
+	public CartoesException(String message) {
 		super(message);
 	}
 }
