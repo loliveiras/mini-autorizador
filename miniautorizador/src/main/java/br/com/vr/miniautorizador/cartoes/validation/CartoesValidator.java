@@ -2,8 +2,6 @@ package br.com.vr.miniautorizador.cartoes.validation;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import br.com.vr.miniautorizador.cartoes.model.Cartoes;
@@ -22,9 +20,6 @@ public class CartoesValidator {
 	 * ABORDAGEM DO PRINCÍPIO DA RESPONSÁBILIDADE ÚNICA.
 	 * 
 	*/
-	@Autowired
-	PasswordEncoder passwordEncode;	
-	
 	public boolean validarCartaoExistente(Cartoes cartao, CartoesRepository cartoesRepository) throws CartoesException {
 		 return Optional.ofNullable(cartao)
                  .map(c -> cartoesRepository.existsById(c.getNumeroCartao()))
@@ -50,9 +45,8 @@ public class CartoesValidator {
 		Cartoes cartao = cartoesRepository.findById(transacao.getNumeroCartao())
 	            .orElseThrow(() -> new CartoesException(CartoesEnum.CARTAO_INEXISTENTE.name()));
 		
-		boolean senhaValida = passwordEncode.matches(transacao.getSenhaCartao(), cartao.getSenha());
-	    Optional.of(senhaValida)
-	            .filter(valida -> valida)
-	            .orElseThrow(() -> new CartoesException(CartoesEnum.SENHA_INVALIDA.name()));
+		if (!cartao.getSenha().equals(cartao.getSenha())) {
+	        throw new CartoesException(CartoesEnum.SENHA_INVALIDA.name());
+	    }
 	}
 }

@@ -6,8 +6,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.8</version>
-		<relativePath /> <!-- lookup parent from repository -->
+		<version>3.3.3</version>
+		<relativePath />
 	</parent>
 	<groupId>br.com.vr</groupId>
 	<artifactId>mini-autorizador</artifactId>
@@ -15,7 +15,7 @@
 	<name>mini-autorizador</name>
 	<description>Processamento para transação de cartões</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		<junit-platform.version>5.3.1</junit-platform.version>
 	</properties>
 	<dependencies>
@@ -47,7 +47,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-			<version>2.7.8</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -78,14 +77,9 @@
 			<artifactId>lombok</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.9.2</version>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.9.2</version>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.5.0</version>
 		</dependency>
 	</dependencies>
 
