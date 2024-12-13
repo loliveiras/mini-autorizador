@@ -37,11 +37,7 @@ public class CartoesServiceImpl implements CartoesService {
 	public void autorizarTransacao(TransacaoCartao transacao) throws CartoesException {
 		cartaoValidator.validarTransacaoCartao(transacao, cartoesRepository);
         
-		 int updatedCount = cartoesRepository.atualizarSaldo(transacao.getNumeroCartao(), transacao.getValorTransacao());
-		 if (updatedCount == 0) {
-			 throw new CartoesException("Saldo insuficiente ou cartão não encontrado.");
-		 }
-		 Cartoes cartao = cartoesRepository.findById(transacao.getNumeroCartao()).orElseThrow(() -> new CartoesException("Cartão não encontrado após atualização."));
+		 Cartoes cartao = cartoesRepository.atualizarSaldo(transacao.getNumeroCartao(), transacao.getValorTransacao());
 		 cartaoValidator.validarSaldoDisponivelCartao(cartao);
 	}
 }
